@@ -131,6 +131,7 @@ export function AddProduct({ isOpen, onClose, onSuccess }: AddProductProps) {
 
       const thorClient = ThorClient.at(THOR_URL);
       const txReceipt = await thorClient.transactions.waitForTransaction(result);
+      console.log("Transaction receipt:", txReceipt);
 
       if (txReceipt?.reverted) {
         setTxStatus(TransactionStatus.Reverted);
@@ -145,12 +146,13 @@ export function AddProduct({ isOpen, onClose, onSuccess }: AddProductProps) {
         setTxStatus(TransactionStatus.Success);
         toast({
           title: "Success!",
-          description: "Product added successfully!",
+          description: "Product added successfully! Refreshing list...",
           status: "success",
           duration: 5000,
           isClosable: true,
         });
         resetForm();
+        console.log("Calling onSuccess to refresh product list");
         onSuccess();
       }
     } catch (error) {
